@@ -6,6 +6,7 @@
 
 #define LED_VERDE       13
 #define LED_VERMELHO    12
+#define BUZZER_PIN          11
 #define PORTA           4
 #define BOTAO           A0
 

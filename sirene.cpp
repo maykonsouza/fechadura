@@ -30,3 +30,4 @@ void sne_acionar(int controle)
     Serial.print("Acionamento da sirene: ");
     Serial.println(controle);
 }
+
