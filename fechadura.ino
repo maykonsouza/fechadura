@@ -213,12 +213,22 @@ int decodificarTimeout()
 
 int decodificarSenha_Invalida()
 {
-    if (teclas[2] == '#' && teclas[1] != '1')
+    // if (teclas[2] == '#' && teclas[1] != '1')
+    // {
+    //     teclas[0]='0';
+    //     teclas[1]='0';
+    //     teclas[2]='0';
+    //     sessaoAberta=false;
+    //     return true;
+    // }
+    // return false;
+    if ( m==6 && (strncmp(pw, pwi, 6)) )
     {
+        sessaoAberta=false;
+        m=0;
         teclas[0]='0';
         teclas[1]='0';
         teclas[2]='0';
-        sessaoAberta=false;
         return true;
     }
     return false;
