@@ -165,7 +165,7 @@ int obterProximoEstado(int estado, int codigoEvento) {
 char* teclas;
 char pw[6];
 char pwi[]={'1','2','3','4','5','6'};
-
+int senha_errada=false;
 
 
 
@@ -185,18 +185,23 @@ int decodificarSenha_Valida()
 {
     int u=0;
     for (int i=0; i<1;i++){
-        if ( m==6 && !(strncmp(pw, usuario[i][1], 6)) )
-        {
-            sessaoAberta=false;
-            m=0;
-            teclas[0]=' ';
-            u_tmp=u;
-            return true;
-        }
+        if ( m==6){ 
+            if(!(strncmp(pw, usuario[i][1], 6)) )
+            {
+                sessaoAberta=false;
+                m=0;
+                teclas[0]=' ';
+                u_tmp=u;
+                return true;
+            }
+            else
+            {
+                senha_errada=true;
+                return false;
+            }
         u++;
-    }
-    
-
+        }
+    }  
     return false;
 }//decodificarSenha_Valida
 
@@ -211,11 +216,12 @@ int decodificarTimeout()
 
 int decodificarSenha_Invalida()
 {
-    if ( m==6 && (strncmp(pw, pwi, 6)) )
+    if (senha_errada)
     {
         sessaoAberta=false;
         m=0;
         teclas[0]=' ';
+        senha_errada=false;
         return true;
     }
     return false;
