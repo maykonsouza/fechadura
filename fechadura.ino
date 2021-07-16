@@ -230,7 +230,10 @@ int decodificarBotao_Senha()
 
 int decodificarPorta_Fechada()
 {  
-    return digitalRead(PORTA);
+    if(analogRead(PORTA_PIN)>800){
+        return true;
+    }
+    return false;
 }//decodificarPorta_Fechada
 
 int decodificarBotao_Interno()
@@ -305,7 +308,7 @@ void setup() {
   pinMode(LED_VERDE, OUTPUT);
   pinMode(LED_VERMELHO, OUTPUT);
   pinMode(BUZZER_PIN, OUTPUT);
-  pinMode(PORTA, INPUT);
+  pinMode(PORTA_PIN, INPUT);
   pinMode(BOTAO, INPUT);
   //lcd.init();
   tela_init();
