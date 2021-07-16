@@ -22,8 +22,8 @@ void tela_imprime(int posicao, char mensagem[15])
 void tela_desliga(int tempo)
 {
  delay(tempo);
- lcd.setBacklight(LOW);
- lcd.print("");
+ lcd.clear();
+ lcd.setBacklight(LOW); 
 }
 // /************************
 //  buzzer_beep

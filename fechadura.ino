@@ -5,6 +5,8 @@
 #include "timer.h"
 #include "buzzer.h"
 #include "display.h"
+#include "leds.h"
+#include "informa.h"
 
 
 
@@ -46,105 +48,53 @@ int executarAcao(int codigoAcao)
     switch(codigoAcao)
     {
     case A01:
-        //tmr_iniciar(true);
-        buzzer_beep(1);
-        //lcd.setBacklight(HIGH);
-        //lcd.setCursor(0,0);
-        //lcd.print("Digite a senha");
-        tela_imprime(0,"Digite a senha:");
-        digitalWrite(LED_VERDE, HIGH);
-        delay(300);
-        digitalWrite(LED_VERDE, LOW);
+        informa_inicio(1);        
+        tela_imprime(0,"Digite a senha:");        
         tmr_iniciar(true);
         break;
     case A02:
-        buzzer_beep(2);
-        //com_notificar("Alarme em alerta");
+        informa_sucesso(2);
         tmr_iniciar(false);
         Serial.println("Abrindo a porta...");
-        //lcd.setCursor(0,0);
         tela_imprime(0,"Abrindo a porta.");
-        for(int i=0;i<4;i++){
-            digitalWrite(LED_VERMELHO, HIGH);
-            digitalWrite(LED_VERDE, HIGH);
-            delay(100);
-            digitalWrite(LED_VERMELHO, LOW);
-            digitalWrite(LED_VERDE, LOW);
-            delay(100);
-        }
-        tela_desliga(200);
-        //delay(300);
-        //lcd.setBacklight(LOW);
+        tela_desliga(800);
         break;
     case A03:
-        buzzer_beep(1);
-        //lcd.setCursor(0,0);
+        informa_timeout(1);
         tela_imprime(0,"Seu tempo acabou!");
         Serial.println("Seu tempo acabou!");
-        digitalWrite(LED_VERMELHO, HIGH);
-        delay(300);
-        digitalWrite(LED_VERMELHO, LOW);
-        //com_notificar("Alarme desacionado");
         tmr_iniciar(false);
-        //delay(300);
-        //lcd.setBacklight(LOW);
-        tela_desliga(400);
+        tela_desliga(800);
         break;
     case A04:
-        buzzer_erro(1);
-        //lcd.setCursor(0,0);
+        informa_erro(1);
         tela_imprime(0,"Senha incorreta");
         Serial.println("Senha incorreta");
-        digitalWrite(LED_VERMELHO, HIGH);
-        delay(300);
-        digitalWrite(LED_VERMELHO, LOW);
-        //com_notificar("Alarme desacionado");
         tmr_iniciar(false);
-        //delay(300);
-        //lcd.setBacklight(LOW);
-        tela_desliga(200);
+        tela_desliga(800);
         break;
     case A05:
         Serial.println("Sistema em uso");
-        digitalWrite(LED_VERMELHO, HIGH);
-        delay(300);
-        digitalWrite(LED_VERMELHO, LOW);
-        //tmr_iniciar(true);
-        //tmr_iniciar(false);
+        informa_timeout(1);
         break;
     case A06:
         Serial.println("Atualiza display");
-        ///sne_acionar(true);
-        //com_notificar("Invasao");
         tmr_iniciar(false);
         break;
     case A07:
         Serial.println("Porta Aberta");
-        digitalWrite(LED_VERDE, HIGH);
-        delay(300);
-        digitalWrite(LED_VERDE, LOW);
-        //com_notificar("Alarme desacionado");
+        informa_inicio(1);
         tmr_iniciar(false);
-        //sne_acionar(false);
         break;
     case A08:
         Serial.println("Porta Fechada");
-        digitalWrite(LED_VERDE, HIGH);
-        delay(300);
-        digitalWrite(LED_VERDE, LOW);
-        ///sne_acionar(true);
-        //com_notificar("Invasao");
+        informa_inicio(1);
         tmr_iniciar(false);
         break;
     case A09:
         Serial.println("Porta Aberta");
-        digitalWrite(LED_VERDE, HIGH);
-        delay(300);
-        digitalWrite(LED_VERDE, LOW);
+        informa_inicio(1);
         tmr_iniciar(false);
-        //com_notificar("Alarme desacionado");
-        //tmr_iniciar(false);
-        //sne_acionar(false);
         break;
     } // switch
 
