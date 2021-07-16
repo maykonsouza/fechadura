@@ -184,8 +184,11 @@ int decodificarRequisicao()
 int decodificarSenha_Valida()
 {
     int u=0;
-    for (int i=0; i<1;i++){
-        if ( m==6){ 
+    
+    if ( m==6)
+    {
+        for (int i=0; usuario[i][0][0]; i++)
+        { 
             if(!(strncmp(pw, usuario[i][1], 6)) )
             {
                 sessaoAberta=false;
@@ -194,13 +197,10 @@ int decodificarSenha_Valida()
                 u_tmp=u;
                 return true;
             }
-            else
-            {
-                senha_errada=true;
-                return false;
-            }
-        u++;
+            u++;       
         }
+        senha_errada=true;        
+        return false;        
     }  
     return false;
 }//decodificarSenha_Valida
