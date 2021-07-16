@@ -8,6 +8,7 @@
 #include "display.h"
 #include "leds.h"
 #include "informa.h"
+#include "usuarios.h"
 
 
 
@@ -28,6 +29,7 @@
   int porta=1;
 
   int m=0;
+  int u_tmp=0;
   
 
 
@@ -62,8 +64,11 @@ int executarAcao(int codigoAcao)
         informa_sucesso(2);
         tmr_iniciar(false);
         Serial.println("Abrindo a porta...");
-        tela_imprime(0,"Abrindo a porta.");
-        tela_desliga(800);
+        tela_limpa();
+        tela_imprime(0,"   Bem vindo, ");
+        tela_imprime(1,usuario[u_tmp][0]);
+        Serial.println(usuario[u_tmp][0]);
+        tela_desliga(1000);
         break;
     case A03:
         informa_timeout(1);
@@ -169,10 +174,7 @@ int decodificarRequisicao()
 {
     if (teclas[0] == '*' && !sessaoAberta)
     {
-        teclas[0]='0';
-        teclas[1]='0';
-        teclas[2]='0';
-        //Serial.println("Requisicao");
+        teclas[0]=' ';
         sessaoAberta=true;
         return true;
     }
@@ -181,24 +183,20 @@ int decodificarRequisicao()
 
 int decodificarSenha_Valida()
 {
-    // if (teclas[2] == '#' && teclas[1] == '1')
-    // {
-    //     sessaoAberta=false;
-    //     teclas[0]='0';
-    //     teclas[1]='0';
-    //     teclas[2]='0';
-    //     return true;
-    // }
-    // return false;
-    if ( m==6 && !(strncmp(pw, pwi, 6)) )
-    {
-        sessaoAberta=false;
-        m=0;
-        teclas[0]='0';
-        teclas[1]='0';
-        teclas[2]='0';
-        return true;
+    int u=0;
+    for (int i=0; i<1;i++){
+        if ( m==6 && !(strncmp(pw, usuario[i][1], 6)) )
+        {
+            sessaoAberta=false;
+            m=0;
+            teclas[0]=' ';
+            u_tmp=u;
+            return true;
+        }
+        u++;
     }
+    
+
     return false;
 }//decodificarSenha_Valida
 
@@ -213,22 +211,11 @@ int decodificarTimeout()
 
 int decodificarSenha_Invalida()
 {
-    // if (teclas[2] == '#' && teclas[1] != '1')
-    // {
-    //     teclas[0]='0';
-    //     teclas[1]='0';
-    //     teclas[2]='0';
-    //     sessaoAberta=false;
-    //     return true;
-    // }
-    // return false;
     if ( m==6 && (strncmp(pw, pwi, 6)) )
     {
         sessaoAberta=false;
         m=0;
-        teclas[0]='0';
-        teclas[1]='0';
-        teclas[2]='0';
+        teclas[0]=' ';
         return true;
     }
     return false;
@@ -238,10 +225,7 @@ int decodificarOutra_Requisicao()
 {
     if (teclas[0] == '*')
     {
-        teclas[0]='0';
-        teclas[1]='0';
-        teclas[2]='0';
-        //Serial.println("Outra_Requisicao");
+        teclas[0]=' ';
         return true;
     }
     return false;
@@ -251,26 +235,8 @@ int decodificarBotao_Senha()
 {
     if (sessaoAberta && (teclas[0]>='0' && teclas[0]<='9')) //&& (teclas[0]>='0' && teclas[0]<='9')
     {
-        
-
-        //pw[0]=teclas[0];
-        //Serial.println("Password");
-        //pw[m++]= '\0';
-        //pw[1]='5';
-        //Serial.println(pw[0]);
-        //Serial.println(pw[1]);
-        //Serial.println("Teste");
-        //Serial.println(teclas[0]);
-        //Serial.println("Novo Teste");
-        //Serial.println(teclas);
         pw[m++]=teclas[0];
-        //char senha[2];
-        //senha[0]=teclas[0];
-        //senha[1]='\n';
-        //Serial.println(senha);
         teclas[0]=' ';
-        teclas[1]='0';
-        teclas[2]='0';
         return true;
     }
     return false;
@@ -291,8 +257,6 @@ int decodificarBotao_Interno()
         return true;
     }
     return false;
-    
-    //return analogRead(BOTAO)>800 ? true : false;
 }//decodificarBotao_Interno
 
 

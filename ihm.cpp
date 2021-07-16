@@ -100,34 +100,34 @@ char* ihm_obterTeclas()
 //   return buf;
 // }
 
-// {
-//   // check for input
-//   char keypressed = kpd.getKey();
-//   if (keypressed != NO_KEY) {
+{
+  // check for input
+  char key = kpd.getKey();
+  if (key != NO_KEY) {
   	
-//       buf[0] = keypressed;
-//       Serial.print(buf[0]);
-//       return buf;
+      buf[0] = key;
+      Serial.println(key);
+      return buf;
+  }
+  buf[0]=-1;
+  return buf;
+}
+
+
+// {
+//   // Serial.print("obter teclas:");
+//   int read_count = 0;
+  
+//   // check for input
+//   if (Serial.available() > 0) {
+//     // read the incoming bytes:
+//     read_count = Serial.readBytesUntil('\n',buf, sizeof(buf)/sizeof(buf[0]) - 1);
+//   }
+  
+//   buf[read_count] = '\0';
+//   if(read_count > 0) {
+//   	Serial.println(buf);
 //   }
   
 //   return buf;
 // }
-
-
-{
-  // Serial.print("obter teclas:");
-  int read_count = 0;
-  
-  // check for input
-  if (Serial.available() > 0) {
-    // read the incoming bytes:
-    read_count = Serial.readBytesUntil('\n',buf, sizeof(buf)/sizeof(buf[0]) - 1);
-  }
-  
-  buf[read_count] = '\0';
-  if(read_count > 0) {
-  	Serial.println(buf);
-  }
-  
-  return buf;
-}

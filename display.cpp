@@ -32,6 +32,11 @@ void tela_desliga(int tempo)
  lcd.clear();
  lcd.setBacklight(LOW); 
 }
+
+void tela_limpa(void)
+{
+ lcd.clear();
+}
 // /************************
 //  buzzer_beep
 //  Aciona o buzzer em modo beep

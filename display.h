@@ -31,5 +31,6 @@
 void tela_init(void);
 void tela_imprime(int posicao, char mensagem[15]);
 void tela_desliga(int tempo);
+void tela_limpa(void);
 
 #endif // DISPLAY_H_INCLUDED
