@@ -14,9 +14,16 @@ void tela_init(void)
 
 void tela_imprime(int posicao, char mensagem[15])
 {
- lcd.setBacklight(HIGH);
- lcd.setCursor(0,posicao);
- lcd.print(mensagem);
+    if (posicao==2){
+    lcd.setBacklight(HIGH);
+    //lcd.setCursor(3,1);
+    lcd.print(mensagem);
+    }
+    else{
+    lcd.setBacklight(HIGH);
+    lcd.setCursor(0,posicao);
+    lcd.print(mensagem);
+    }
 }
 
 void tela_desliga(int tempo)

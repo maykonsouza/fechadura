@@ -16,7 +16,7 @@
 #define NUM_EVENTOS 8
 
 // ESTADOS
-#define IDLE                0
+#define ESPERA                0
 #define INSERINDO_SENHA     1
 #define PORTA_ABERTA        2
 

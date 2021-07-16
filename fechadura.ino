@@ -1,5 +1,6 @@
 #include "definicoes_sistema.h"
 //#include "comunicacao.h"
+
 #include "ihm.h"
 #include "senhas.h"
 #include "timer.h"
@@ -11,12 +12,13 @@
 
 
 
+
 /***********************************************************************
  Estaticos
  ***********************************************************************/
   int codigoEvento = NENHUM_EVENTO;
   int eventoInterno = NENHUM_EVENTO;
-  int estado = IDLE;
+  int estado = ESPERA;
   int codigoAcao;
 
   int codigoAcao_tmp=-2;
@@ -24,6 +26,9 @@
   int codigoEvento_tmp=-2;
   int porta_tmp=0;
   int porta=1;
+
+  int m=0;
+  
 
 
   int sessaoAberta = false;
@@ -49,8 +54,9 @@ int executarAcao(int codigoAcao)
     {
     case A01:
         informa_inicio(1);        
-        tela_imprime(0,"Digite a senha:");        
+        tela_imprime(0,"Digite a senha: ");        
         tmr_iniciar(true);
+        tela_imprime(1,"     "); 
         break;
     case A02:
         informa_sucesso(2);
@@ -79,7 +85,8 @@ int executarAcao(int codigoAcao)
         break;
     case A06:
         Serial.println("Atualiza display");
-        tmr_iniciar(false);
+        tela_imprime(2,"*");
+        tmr_iniciar(true);
         break;
     case A07:
         Serial.println("Porta Aberta");
@@ -107,9 +114,9 @@ int executarAcao(int codigoAcao)
 
 
 int proximo_estado_matrizTransicaoEstados[NUM_ESTADOS][NUM_EVENTOS] = {
-    {INSERINDO_SENHA, IDLE, IDLE, IDLE, IDLE, IDLE, IDLE, PORTA_ABERTA},
-    {INSERINDO_SENHA, PORTA_ABERTA, IDLE, IDLE, INSERINDO_SENHA, INSERINDO_SENHA, INSERINDO_SENHA,INSERINDO_SENHA},
-    {PORTA_ABERTA, PORTA_ABERTA, PORTA_ABERTA, PORTA_ABERTA, PORTA_ABERTA, PORTA_ABERTA, IDLE, PORTA_ABERTA}
+    {INSERINDO_SENHA, ESPERA, ESPERA, ESPERA, ESPERA, ESPERA, ESPERA, PORTA_ABERTA},
+    {INSERINDO_SENHA, PORTA_ABERTA, ESPERA, ESPERA, INSERINDO_SENHA, INSERINDO_SENHA, INSERINDO_SENHA,INSERINDO_SENHA},
+    {PORTA_ABERTA, PORTA_ABERTA, PORTA_ABERTA, PORTA_ABERTA, PORTA_ABERTA, PORTA_ABERTA, ESPERA, PORTA_ABERTA}
 };
 
 int acao_matrizTransicaoEstados[NUM_ESTADOS][NUM_EVENTOS] = {
@@ -151,6 +158,10 @@ int obterProximoEstado(int estado, int codigoEvento) {
  Retorno: codigo do evento
 *************************************************************************/
 char* teclas;
+char pw[6];
+char pwi[]={'1','2','3','4','5','6'};
+
+
 
 
 
@@ -170,9 +181,19 @@ int decodificarRequisicao()
 
 int decodificarSenha_Valida()
 {
-    if (teclas[2] == '#' && teclas[1] == '1')
+    // if (teclas[2] == '#' && teclas[1] == '1')
+    // {
+    //     sessaoAberta=false;
+    //     teclas[0]='0';
+    //     teclas[1]='0';
+    //     teclas[2]='0';
+    //     return true;
+    // }
+    // return false;
+    if ( m==6 && !(strncmp(pw, pwi, 6)) )
     {
         sessaoAberta=false;
+        m=0;
         teclas[0]='0';
         teclas[1]='0';
         teclas[2]='0';
@@ -218,9 +239,26 @@ int decodificarOutra_Requisicao()
 
 int decodificarBotao_Senha()
 {
-    if (teclas[3] == '*')
+    if (sessaoAberta && (teclas[0]>='0' && teclas[0]<='9')) //&& (teclas[0]>='0' && teclas[0]<='9')
     {
-        teclas[0]='0';
+        
+
+        //pw[0]=teclas[0];
+        //Serial.println("Password");
+        //pw[m++]= '\0';
+        //pw[1]='5';
+        //Serial.println(pw[0]);
+        //Serial.println(pw[1]);
+        //Serial.println("Teste");
+        //Serial.println(teclas[0]);
+        //Serial.println("Novo Teste");
+        //Serial.println(teclas);
+        pw[m++]=teclas[0];
+        //char senha[2];
+        //senha[0]=teclas[0];
+        //senha[1]='\n';
+        //Serial.println(senha);
+        teclas[0]=' ';
         teclas[1]='0';
         teclas[2]='0';
         return true;
@@ -252,16 +290,37 @@ int decodificarBotao_Interno()
 int obterEvento()
 {
   int retval = NENHUM_EVENTO;
+  char ps[6];
+
+  teclas = ihm_obterTeclas();
 
   //porta=digitalRead(PORTA);
   //Serial.println(digitalRead(PORTA));
   //Serial.println(analogRead(BOTAO));
+
+    //pw[0]=teclas[0];
+    //Serial.println("Password");
+    //pw[m++]= '\0';
+    //pw={'5','2','\0'} ;
+    //ps[0]='1';
+    //ps[1]='1';
+    //ps[2]='1';
+    //ps[3]='\0';
+
+    
+    //Serial.println(pw[0]);
+    //sprintf(message, "%c%c%c%c%c%c%c%c", BYTE_TO_BINARY(k)); 
+    //Serial.println(ps);
+    //Serial.println("Teste");
+    //Serial.println(teclas[0]);
+    //Serial.println("Novo Teste");
+    //Serial.println(teclas);
   
     
 
 
   if (1){
-  teclas = ihm_obterTeclas();
+  
   //porta = ihm_verificarPorta();
   if (decodificarBotao_Interno())
     return BOTAO_INTERNO;
@@ -314,6 +373,7 @@ void setup() {
   tela_init();
   
   
+  
   ///Testes
 
   //iniciaSistema();
@@ -321,6 +381,11 @@ void setup() {
 } // setup
 
 void loop() {
+
+//   char key = kpd.getKey();
+//   if(key)  // Checa se um botão foi pressionado.
+//   {Serial.println(key);
+//   }
   if (eventoInterno == NENHUM_EVENTO) {
       codigoEvento = obterEvento();
   } else {
@@ -343,5 +408,8 @@ void loop() {
         codigoEvento_tmp=codigoEvento;
       }
   }
+ 
+
+  
   delay(50);
 } // loop
