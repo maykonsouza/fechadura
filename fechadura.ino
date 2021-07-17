@@ -9,6 +9,7 @@
 #include "leds.h"
 #include "informa.h"
 #include "usuarios.h"
+#include "porta.h"
 
 
 
@@ -26,7 +27,7 @@
   int estado_tmp=-2;
   int codigoEvento_tmp=-2;
   int porta_tmp=0;
-  int porta=1;
+  //int porta=1;
 
   int m=0;
   int u_tmp=0;
@@ -68,6 +69,7 @@ int executarAcao(int codigoAcao)
         tela_imprime(0,"   Bem vindo, ");
         tela_imprime(1,usuario[u_tmp][0]);
         Serial.println(usuario[u_tmp][0]);
+        porta_abrir();
         tela_desliga(1000);
         break;
     case A03:
@@ -85,6 +87,7 @@ int executarAcao(int codigoAcao)
         tela_desliga(800);
         break;
     case A05:
+        tela_imprime(0,"Sistema em uso");
         Serial.println("Sistema em uso");
         informa_timeout(1);
         break;
@@ -94,18 +97,19 @@ int executarAcao(int codigoAcao)
         tmr_iniciar(true);
         break;
     case A07:
-        Serial.println("Porta Aberta");
+        Serial.println("Porta está Aberta");
         informa_inicio(1);
         tmr_iniciar(false);
         break;
     case A08:
-        Serial.println("Porta Fechada");
+        Serial.println("Porta foi Fechada");
         informa_inicio(1);
         tmr_iniciar(false);
         break;
     case A09:
-        Serial.println("Porta Aberta");
+        Serial.println("Abrir porta pelo botão interno");
         informa_inicio(1);
+        porta_abrir();
         tmr_iniciar(false);
         break;
     } // switch
@@ -351,6 +355,7 @@ void setup() {
   pinMode(BOTAO, INPUT);
   //lcd.init();
   tela_init();
+  porta_init();
   
   
   

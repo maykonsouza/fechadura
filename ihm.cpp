@@ -18,7 +18,7 @@ char keys[ROWS][COLS] = {
 
 // Conecta o teclado matricial em linha 0, linha 1, linha 2, linha 3 e linha 4...
 //dos pinos do arduino.
-byte rowPins[ROWS] = { 10, 9, 8, 7 };
+byte rowPins[ROWS] = { 10, 9, 0, 7 };
 
 // Conecta o teclado matricial em coluna 0, coluna 1, coluna 2, coluna 3 e...
 //coluna 4 do arduino.
