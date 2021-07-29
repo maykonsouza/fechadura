@@ -386,7 +386,7 @@ void informa_timeout(int k)
 void simula_porta()
 {
     entrada.abrir();
-    delay(2000);
+    delay(20*TEMPO);
     entrada.fechar();
 }
 
