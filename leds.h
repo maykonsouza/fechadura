@@ -6,11 +6,10 @@
 class Led{
   public:
     Led(int pin);
+    void init();
     void ligar();
     void desligar();
-  	//void bip();
-  	//void acionar(int controle);
-    
+
   private:
     int pin;
 };

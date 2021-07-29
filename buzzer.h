@@ -5,6 +5,7 @@
 class Buzzer{
   public:
     Buzzer(int pin);
+    void init();
     void sucesso();
     void erro();
     void desligar();

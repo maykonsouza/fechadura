@@ -45,5 +45,16 @@ class InterfaceHomemMaquinaKeypad {
 };
 
 
+class Chave{
+  public:
+    Chave(int pin);
+    void init();
+    int estado();
+    
+  private:
+    int pin;
+};
+
+
 
 #endif // IHM_H_INCLUDED

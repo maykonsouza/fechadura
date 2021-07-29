@@ -20,6 +20,8 @@ Led ledVerde(LED_VERDE);
 Led ledVermelho(LED_VERMELHO);
 Buzzer beep(BUZZER_PIN);
 Porta entrada(SERVO_PIN);
+Chave botao(BOTAO);
+Chave sensor(PORTA_PIN);
 // ComunicacaoSerial com;
 // SireneBuzzer sne;
 InterfaceHomemMaquinaKeypad ihm;
@@ -41,12 +43,10 @@ Display tela;
   int estado_tmp=-2;
   int codigoEvento_tmp=-2;
   int porta_tmp=0;
-  //int porta=1;
+
 
   int m=0;
   int u_tmp=0;
-  
-
 
   int sessaoAberta = false;
  
@@ -89,20 +89,17 @@ int executarAcao(int codigoAcao)
     case A03:
         informa_timeout(1);
         tela.imprimir(0,"Seu tempo acabou!");
-        Serial.println("Seu tempo acabou!");
         tmr.iniciar(false);
         tela.desligar(800);
         break;
     case A04:
         informa_erro(1);
         tela.imprimir(0,"Senha incorreta");
-        Serial.println("Senha incorreta");
         tmr.iniciar(false);
         tela.desligar(800);
         break;
     case A05:
         tela.imprimir(0,"Sistema em uso");
-        Serial.println("Sistema em uso");
         informa_timeout(1);
         break;
     case A06:
@@ -183,7 +180,6 @@ int obterProximoEstado(int estado, int codigoEvento) {
 char* teclas;
 
 char pw[6];
-char pwi[]={'1','2','3','4','5','6'};
 int senha_errada=false;
 
 
@@ -269,7 +265,7 @@ int decodificarBotao_Senha()
 
 int decodificarPorta_Fechada()
 {  
-    if(analogRead(PORTA_PIN)>800){
+    if(sensor.estado()){
         return true;
     }
     return false;
@@ -277,7 +273,7 @@ int decodificarPorta_Fechada()
 
 int decodificarBotao_Interno()
 {
-    if(analogRead(BOTAO)>800){
+    if(botao.estado()){
         sessaoAberta=false;
         return true;
     }
@@ -395,24 +391,14 @@ void simula_porta()
 
 void setup() {
   Serial.begin(9600);
-
-  ///Testes
-  pinMode(LED_VERDE, OUTPUT);
-  pinMode(LED_VERMELHO, OUTPUT);
-  pinMode(BUZZER_PIN, OUTPUT);
-  pinMode(PORTA_PIN, INPUT);
-  pinMode(BOTAO, INPUT);
-  //web_setup();
-  //lcd.init();
-  
+  sensor.init();
   tela.init();
   entrada.init();
-  
-  
-  
-  ///Testes
+  ledVermelho.init();
+  ledVerde.init();
+  beep.init();
+  botao.init();
 
-  //iniciaSistema();
   Serial.println("Sistema iniciado");
 } // setup
 

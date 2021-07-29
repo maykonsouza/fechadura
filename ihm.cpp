@@ -190,3 +190,19 @@ char* InterfaceHomemMaquinaKeypad::obterTeclas()
 }
 
 
+Chave::Chave(int pin){
+  this->pin = pin;
+  
+}
+
+
+void Chave::init(){
+  pinMode(pin, INPUT);
+}
+
+int Chave::estado(){
+  if(analogRead(pin)>800){
+        return true;
+    }
+  return false;
+}

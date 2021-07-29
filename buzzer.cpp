@@ -8,9 +8,12 @@
 
 Buzzer::Buzzer(int pin){
   this->pin = pin;
-  pinMode(pin, OUTPUT);
+  
 }
 
+void Buzzer::init(){
+  pinMode(pin, OUTPUT);
+}
 
 void Buzzer::sucesso(){
   tone(pin,440);

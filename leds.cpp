@@ -3,10 +3,12 @@
 
 
 Led::Led(int pin){
-  this->pin = pin;
-  pinMode(pin, OUTPUT);
+  this->pin = pin;  
 }
 
+void Led::init(){
+  pinMode(pin, OUTPUT);
+}
 
 void Led::ligar(){
   digitalWrite(pin, HIGH);
