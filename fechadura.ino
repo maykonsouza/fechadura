@@ -26,6 +26,7 @@ Porta entrada(SERVO_PIN);
 // SenhasFixa sha;
 TimerInterno tmr;
 // PassiveInfraredSensor pir;
+Display tela;
 
 
 /***********************************************************************
@@ -70,43 +71,43 @@ int executarAcao(int codigoAcao)
     {
     case A01:
         informa_inicio(1);        
-        tela_imprime(0,"Digite a senha: ");        
+        tela.imprimir(0,"Digite a senha: ");        
         tmr.iniciar(true);
-        tela_imprime(1,"     "); 
+        tela.imprimir(1,"     "); 
         break;
     case A02:
         informa_sucesso(2);
         tmr.iniciar(false);
         Serial.println("Abrindo a porta...");
-        tela_limpa();
-        tela_imprime(0,"   Bem vindo, ");
-        tela_imprime(1,usuario[u_tmp][0]);
+        tela.limpa();
+        tela.imprimir(0,"   Bem vindo, ");
+        tela.imprimir(1,usuario[u_tmp][0]);
         Serial.println(usuario[u_tmp][0]);
         simula_porta();
-        tela_desliga(1000);
+        tela.desligar(1000);
         break;
     case A03:
         informa_timeout(1);
-        tela_imprime(0,"Seu tempo acabou!");
+        tela.imprimir(0,"Seu tempo acabou!");
         Serial.println("Seu tempo acabou!");
         tmr.iniciar(false);
-        tela_desliga(800);
+        tela.desligar(800);
         break;
     case A04:
         informa_erro(1);
-        tela_imprime(0,"Senha incorreta");
+        tela.imprimir(0,"Senha incorreta");
         Serial.println("Senha incorreta");
         tmr.iniciar(false);
-        tela_desliga(800);
+        tela.desligar(800);
         break;
     case A05:
-        tela_imprime(0,"Sistema em uso");
+        tela.imprimir(0,"Sistema em uso");
         Serial.println("Sistema em uso");
         informa_timeout(1);
         break;
     case A06:
         Serial.println("Atualiza display");
-        tela_imprime(2,"*");
+        tela.imprimir(2,"*");
         tmr.iniciar(true);
         break;
     case A07:
@@ -293,31 +294,6 @@ int obterEvento()
   
   teclas = ihm_obterTeclas();
 
-  //porta=digitalRead(PORTA);
-  //Serial.println(digitalRead(PORTA));
-  //Serial.println(analogRead(BOTAO));
-
-    //pw[0]=teclas[0];
-    //Serial.println("Password");
-    //pw[m++]= '\0';
-    //pw={'5','2','\0'} ;
-    //ps[0]='1';
-    //ps[1]='1';
-    //ps[2]='1';
-    //ps[3]='\0';
-
-    
-    //Serial.println(pw[0]);
-    //sprintf(message, "%c%c%c%c%c%c%c%c", BYTE_TO_BINARY(k)); 
-    //Serial.println(ps);
-    //Serial.println("Teste");
-    //Serial.println(teclas[0]);
-    //Serial.println("Novo Teste");
-    //Serial.println(teclas);
-  
-    
-
-
   if (1){
   
   //porta = ihm_verificarPorta();
@@ -428,9 +404,8 @@ void setup() {
   pinMode(BOTAO, INPUT);
   //web_setup();
   //lcd.init();
-  tela_init();
-  //porta_init();
   
+  tela.init();
   entrada.init();
   
   
