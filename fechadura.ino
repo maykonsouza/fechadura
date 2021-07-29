@@ -25,20 +25,21 @@ Display tela;
 
 /***********************************************************************
  Estaticos
- ***********************************************************************/
-  int codigoEvento = NENHUM_EVENTO;
-  int eventoInterno = NENHUM_EVENTO;
-  int estado = ESPERA;
-  int codigoAcao;
+***********************************************************************/
+int codigoAcao_tmp=-2;
+int estado_tmp=-2;
+int codigoEvento_tmp=-2;
+int porta_tmp=0;
+int m=0;
+int u_tmp=0;
+int sessaoAberta = false;
+int codigoEvento = NENHUM_EVENTO;
+int eventoInterno = NENHUM_EVENTO;
+int estado = ESPERA;
+int codigoAcao;
+int acao_matrizTransicaoEstados[NUM_ESTADOS][NUM_EVENTOS];
+int proximo_estado_matrizTransicaoEstados[NUM_ESTADOS][NUM_EVENTOS];
 
-  int codigoAcao_tmp=-2;
-  int estado_tmp=-2;
-  int codigoEvento_tmp=-2;
-  int porta_tmp=0;
-  int m=0;
-  int u_tmp=0;
-  int sessaoAberta = false;
- 
 
 
 /************************************************************************
@@ -117,25 +118,63 @@ int executarAcao(int codigoAcao)
     return retval;
 } // executarAcao
 
+/************************************************************************
+ iniciaMaquina de Estados
+ Carrega a maquina de estados
+ Parametros de entrada: nenhum
+ Retorno: nenhum
+*************************************************************************/
+void iniciaMaquinaEstados()
+{
+  int i;
+  int j;
+
+  for (i=0; i < NUM_ESTADOS; i++) {
+    for (j=0; j < NUM_EVENTOS; j++) {
+       acao_matrizTransicaoEstados[i][j] = NENHUMA_ACAO;
+       proximo_estado_matrizTransicaoEstados[i][j] = i;
+    }
+  }
+  proximo_estado_matrizTransicaoEstados[ESPERA][REQUISICAO] = INSERINDO_SENHA;
+  acao_matrizTransicaoEstados[ESPERA][REQUISICAO] = A01;
+
+  proximo_estado_matrizTransicaoEstados[PORTA_ABERTA][REQUISICAO] = PORTA_ABERTA;
+  acao_matrizTransicaoEstados[PORTA_ABERTA][REQUISICAO] = A07;
+
+  proximo_estado_matrizTransicaoEstados[INSERINDO_SENHA][SENHA_VALIDA] = PORTA_ABERTA;
+  acao_matrizTransicaoEstados[INSERINDO_SENHA][SENHA_VALIDA] = A02;
+
+  proximo_estado_matrizTransicaoEstados[INSERINDO_SENHA][TIMEOUT] = ESPERA;
+  acao_matrizTransicaoEstados[INSERINDO_SENHA][TIMEOUT] = A03;
+
+  proximo_estado_matrizTransicaoEstados[INSERINDO_SENHA][SENHA_INVALIDA] = ESPERA;
+  acao_matrizTransicaoEstados[INSERINDO_SENHA][SENHA_INVALIDA] = A04;
+
+  proximo_estado_matrizTransicaoEstados[INSERINDO_SENHA][OUTRA_REQUISICAO] = INSERINDO_SENHA;
+  acao_matrizTransicaoEstados[INSERINDO_SENHA][OUTRA_REQUISICAO] = A05;
+
+  proximo_estado_matrizTransicaoEstados[INSERINDO_SENHA][BOTAO_SENHA] = INSERINDO_SENHA;
+  acao_matrizTransicaoEstados[INSERINDO_SENHA][BOTAO_SENHA] = A06;
+
+  proximo_estado_matrizTransicaoEstados[PORTA_ABERTA][PORTA_FECHADA] = ESPERA;
+  acao_matrizTransicaoEstados[PORTA_ABERTA][PORTA_FECHADA] = A08;
+
+  proximo_estado_matrizTransicaoEstados[ESPERA][BOTAO_INTERNO] = PORTA_ABERTA;
+  acao_matrizTransicaoEstados[ESPERA][BOTAO_INTERNO] = A09;
 
 
+} // initStateMachine
 
-
-
-int proximo_estado_matrizTransicaoEstados[NUM_ESTADOS][NUM_EVENTOS] = {
-    {INSERINDO_SENHA, ESPERA, ESPERA, ESPERA, ESPERA, ESPERA, ESPERA, PORTA_ABERTA},
-    {INSERINDO_SENHA, PORTA_ABERTA, ESPERA, ESPERA, INSERINDO_SENHA, INSERINDO_SENHA, INSERINDO_SENHA,INSERINDO_SENHA},
-    {PORTA_ABERTA, PORTA_ABERTA, PORTA_ABERTA, PORTA_ABERTA, PORTA_ABERTA, PORTA_ABERTA, ESPERA, PORTA_ABERTA}
-};
-
-int acao_matrizTransicaoEstados[NUM_ESTADOS][NUM_EVENTOS] = {
-    {A01, NENHUMA_ACAO, NENHUMA_ACAO, NENHUMA_ACAO, NENHUMA_ACAO, NENHUMA_ACAO, NENHUMA_ACAO, A09},
-    {NENHUMA_ACAO, A02, A03, A04, A05, A06, NENHUMA_ACAO, NENHUMA_ACAO},
-    {A07, NENHUMA_ACAO, NENHUMA_ACAO, NENHUMA_ACAO, NENHUMA_ACAO, NENHUMA_ACAO, A08, NENHUMA_ACAO}
-};
-
-
-
+/************************************************************************
+ iniciaSistema
+ Inicia o sistema ...
+ Parametros de entrada: nenhum
+ Retorno: nenhum
+*************************************************************************/
+void iniciaSistema()
+{
+   iniciaMaquinaEstados();
+} // initSystem
 
 /************************************************************************
  obterAcao
@@ -160,19 +199,9 @@ int obterProximoEstado(int estado, int codigoEvento) {
   return proximo_estado_matrizTransicaoEstados[estado][codigoEvento];
 } // obterAcao
 
-/************************************************************************
- obterEvento
- Obtem um evento, que pode ser da IHM ou do alarme
- Parametros de entrada: nenhum
- Retorno: codigo do evento
-*************************************************************************/
 char* teclas;
-
 char pw[6];
 int senha_errada=false;
-
-
-
 
 int decodificarRequisicao()
 {
@@ -378,6 +407,7 @@ void setup() {
   ledVerde.init();
   beep.init();
   botao.init();
+  iniciaSistema();
 
   Serial.println("Sistema iniciado");
 } // setup
@@ -407,7 +437,6 @@ void loop() {
       }
   }
  
-
   
   delay(50);
 } // loop
