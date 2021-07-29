@@ -11,6 +11,7 @@
 #define PORTA_PIN       A1
 #define BOTAO           A0
 
+#define TEMPO 200
 
 
 #define NUM_ESTADOS 3

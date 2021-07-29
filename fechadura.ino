@@ -1,13 +1,9 @@
 #include "definicoes_sistema.h"
-//#include "comunicacao.h"
-
 #include "ihm.h"
-//#include "senhas.h"
 #include "timer.h"
 #include "buzzer.h"
 #include "display.h"
 #include "leds.h"
-//#include "informa.h"
 #include "usuarios.h"
 #include "porta.h"
 #include "web.h"
@@ -22,12 +18,8 @@ Buzzer beep(BUZZER_PIN);
 Porta entrada(SERVO_PIN);
 Chave botao(BOTAO);
 Chave sensor(PORTA_PIN);
-// ComunicacaoSerial com;
-// SireneBuzzer sne;
 InterfaceHomemMaquinaKeypad ihm;
-// SenhasFixa sha;
 TimerInterno tmr;
-// PassiveInfraredSensor pir;
 Display tela;
 
 
@@ -43,14 +35,11 @@ Display tela;
   int estado_tmp=-2;
   int codigoEvento_tmp=-2;
   int porta_tmp=0;
-
-
   int m=0;
   int u_tmp=0;
-
   int sessaoAberta = false;
  
-#define TEMPO 200
+
 
 /************************************************************************
  executarAcao
@@ -254,7 +243,7 @@ int decodificarOutra_Requisicao()
 
 int decodificarBotao_Senha()
 {
-    if (sessaoAberta && (teclas[0]>='0' && teclas[0]<='9')) //&& (teclas[0]>='0' && teclas[0]<='9')
+    if (sessaoAberta && (teclas[0]>='0' && teclas[0]<='9'))
     {
         pw[m++]=teclas[0];
         teclas[0]=' ';
@@ -285,18 +274,12 @@ int decodificarBotao_Interno()
 int obterEvento()
 {
   int retval = NENHUM_EVENTO;
-  char ps[6];
 
-  
   teclas = ihm.obterTeclas();
 
-  if (1){
-  
-  //porta = ihm_verificarPorta();
   if (decodificarBotao_Interno())
     return BOTAO_INTERNO;
   if (decodificarRequisicao())
-    //porta=digitalRead(PORTA);
     return REQUISICAO;
   if (decodificarSenha_Valida())
     return SENHA_VALIDA;
@@ -311,10 +294,7 @@ int obterEvento()
   if (decodificarPorta_Fechada())
     return PORTA_FECHADA;
   
-
   return retval;
-  }
-    return retval;
  
 
 } // obterEvento
@@ -404,11 +384,6 @@ void setup() {
 
 void loop() {
 
-//web_loop();
-//   char key = kpd.getKey();
-//   if(key)  // Checa se um botão foi pressionado.
-//   {Serial.println(key);
-//   }
   if (eventoInterno == NENHUM_EVENTO) {
       codigoEvento = obterEvento();
   } else {
