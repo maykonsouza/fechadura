@@ -2,6 +2,21 @@
 #define PORTA_H_INCLUDED
 
 
+
+class Porta{
+  public:
+    Porta(int pin);
+    void init();
+    void abrir();
+    void fechar();
+    
+  private:
+    int pin;
+    int pp = 0;
+};
+
+
+
 /************************
  SERVO_beep
  Aciona o SERVO em modo beep

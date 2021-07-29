@@ -19,6 +19,7 @@
 Led ledVerde(LED_VERDE);
 Led ledVermelho(LED_VERMELHO);
 Buzzer beep(BUZZER_PIN);
+Porta entrada(SERVO_PIN);
 // ComunicacaoSerial com;
 // SireneBuzzer sne;
 // InterfaceHomemMaquinaKeypad ihm;
@@ -81,7 +82,7 @@ int executarAcao(int codigoAcao)
         tela_imprime(0,"   Bem vindo, ");
         tela_imprime(1,usuario[u_tmp][0]);
         Serial.println(usuario[u_tmp][0]);
-        porta_abrir();
+        simula_porta();
         tela_desliga(1000);
         break;
     case A03:
@@ -121,7 +122,7 @@ int executarAcao(int codigoAcao)
     case A09:
         Serial.println("Abrir porta pelo botão interno");
         informa_inicio(1);
-        porta_abrir();
+        simula_porta();
         tmr_iniciar(false);
         break;
     } // switch
@@ -401,6 +402,13 @@ void informa_timeout(int k)
     } 
 }
 
+void simula_porta()
+{
+    entrada.abrir();
+    delay(2000);
+    entrada.fechar();
+}
+
 
 /************************************************************************
  Main
@@ -421,8 +429,9 @@ void setup() {
   //web_setup();
   //lcd.init();
   tela_init();
-  porta_init();
+  //porta_init();
   
+  entrada.init();
   
   
   
