@@ -1,6 +1,6 @@
 #ifndef USUARIOS_H_INCLUDED
 #define USUARIOS_H_INCLUDED
-
+//s
 
 char usuario[10][2][16] ={
     {
