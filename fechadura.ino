@@ -22,7 +22,7 @@ Buzzer beep(BUZZER_PIN);
 Porta entrada(SERVO_PIN);
 // ComunicacaoSerial com;
 // SireneBuzzer sne;
-// InterfaceHomemMaquinaKeypad ihm;
+InterfaceHomemMaquinaKeypad ihm;
 // SenhasFixa sha;
 TimerInterno tmr;
 // PassiveInfraredSensor pir;
@@ -292,7 +292,7 @@ int obterEvento()
   char ps[6];
 
   
-  teclas = ihm_obterTeclas();
+  teclas = ihm.obterTeclas();
 
   if (1){
   

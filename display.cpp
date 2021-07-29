@@ -7,68 +7,37 @@
 
 LiquidCrystal_I2C lcd(0x27,16,2);
 
-void tela_init(void)
-{
- lcd.init();
+
+Display::Display(){
+
 }
 
-void tela_imprime(int posicao, char mensagem[15])
-{
+
+void Display::init(){
+  lcd.init();
+}
+
+
+void Display::limpa(){
+  lcd.clear();
+}
+
+
+void Display::imprimir(int posicao, char mensagem[15]){
     if (posicao==2){
-    lcd.setBacklight(HIGH);
-    //lcd.setCursor(3,1);
-    lcd.print(mensagem);
+        lcd.setBacklight(HIGH);
+        lcd.print(mensagem);
     }
     else{
-    lcd.setBacklight(HIGH);
-    lcd.setCursor(0,posicao);
-    lcd.print(mensagem);
+        lcd.setBacklight(HIGH);
+        lcd.setCursor(0,posicao);
+        lcd.print(mensagem);
     }
 }
 
-void tela_desliga(int tempo)
-{
- delay(tempo);
- lcd.clear();
- lcd.setBacklight(LOW); 
-}
 
-void tela_limpa(void)
-{
- lcd.clear();
+void Display::desligar(int tempo){
+    delay(tempo);
+    lcd.clear();
+    lcd.setBacklight(LOW); 
 }
-// /************************
-//  buzzer_beep
-//  Aciona o buzzer em modo beep
-//  entradas
-//    k: Quanridade de beeps
-//  saidas
-//    nenhuma
-// *************************/
-// void buzzer_beep(int k)
-// {
-//     for(int i=0; i<k; i++){
-//       tone(BUZZER_PIN,440); 
-//       delay(200);
-//       noTone(BUZZER_PIN);
-//       delay(200); 
-//     } 
-// }
-
-// /************************
-//  buzzer_erro
-//  Aciona o buzzer em modo beep
-//  entradas
-//    k: Quanridade de beeps
-//  saidas
-//    nenhuma
-// *************************/
-// void buzzer_erro(int k)
-// {
-//     for(int i=0; i<k; i++){
-//       tone(BUZZER_PIN,329); 
-//       delay(300);
-//       noTone(BUZZER_PIN);
-//       delay(300); 
-//     } 
-// }
