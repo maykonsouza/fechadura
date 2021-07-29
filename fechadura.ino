@@ -7,12 +7,24 @@
 #include "buzzer.h"
 #include "display.h"
 #include "leds.h"
-#include "informa.h"
+//#include "informa.h"
 #include "usuarios.h"
 #include "porta.h"
+#include "web.h"
 
 
-
+/***********************************************************************
+ Componentes
+ ***********************************************************************/
+Led ledVerde(LED_VERDE);
+Led ledVermelho(LED_VERMELHO);
+Buzzer beep(BUZZER_PIN);
+// ComunicacaoSerial com;
+// SireneBuzzer sne;
+// InterfaceHomemMaquinaKeypad ihm;
+// SenhasFixa sha;
+// TimerInterno tmr;
+// PassiveInfraredSensor pir;
 
 
 /***********************************************************************
@@ -36,7 +48,7 @@
 
   int sessaoAberta = false;
  
-
+#define TEMPO 200
 
 /************************************************************************
  executarAcao
@@ -167,6 +179,7 @@ int obterProximoEstado(int estado, int codigoEvento) {
  Retorno: codigo do evento
 *************************************************************************/
 char* teclas;
+
 char pw[6];
 char pwi[]={'1','2','3','4','5','6'};
 int senha_errada=false;
@@ -276,6 +289,7 @@ int obterEvento()
   int retval = NENHUM_EVENTO;
   char ps[6];
 
+  
   teclas = ihm_obterTeclas();
 
   //porta=digitalRead(PORTA);
@@ -333,8 +347,59 @@ int obterEvento()
 } // obterEvento
 
 
+/***********************************************************************
+ * Tarefas
+ ***********************************************************************/
+void informa_inicio(int k)
+{
+    for(int i=0; i<k; i++){
+        beep.sucesso();
+        ledVerde.ligar();
+      delay(TEMPO);
+        beep.desligar();
+        ledVerde.desligar();
+      delay(TEMPO);
+    } 
+}
+
+void informa_erro(int k)
+{
+    for(int i=0; i<k; i++){
+        beep.erro();
+        ledVermelho.ligar();
+      delay(2*TEMPO);
+        beep.desligar();
+        ledVermelho.desligar();
+      delay(2*TEMPO);
+    } 
+}
+
+void informa_sucesso(int k)
+{
+    for(int i=0; i<k; i++){
+        beep.sucesso();
+        ledVerde.ligar();
+        ledVermelho.ligar();
+      delay(TEMPO);
+        beep.desligar();
+        ledVermelho.desligar();
+        ledVerde.desligar();
+      delay(TEMPO);
+    } 
+}
 
 
+void informa_timeout(int k)
+{
+    for(int i=0; i<k; i++){
+        beep.erro();
+        ledVermelho.ligar();
+      delay(TEMPO);
+        beep.desligar();
+        ledVermelho.desligar();
+      delay(TEMPO);
+    } 
+}
 
 
 /************************************************************************
@@ -353,9 +418,11 @@ void setup() {
   pinMode(BUZZER_PIN, OUTPUT);
   pinMode(PORTA_PIN, INPUT);
   pinMode(BOTAO, INPUT);
+  //web_setup();
   //lcd.init();
   tela_init();
   porta_init();
+  
   
   
   
@@ -367,6 +434,7 @@ void setup() {
 
 void loop() {
 
+//web_loop();
 //   char key = kpd.getKey();
 //   if(key)  // Checa se um botão foi pressionado.
 //   {Serial.println(key);

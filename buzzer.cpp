@@ -3,38 +3,25 @@
 #include "definicoes_sistema.h"
 #include "buzzer.h"
 
-/************************
- buzzer_beep
- Aciona o buzzer em modo beep
- entradas
-   k: Quanridade de beeps
- saidas
-   nenhuma
-*************************/
-void buzzer_beep(int k)
-{
-    for(int i=0; i<k; i++){
-      tone(BUZZER_PIN,440); 
-      delay(200);
-      noTone(BUZZER_PIN);
-      delay(200); 
-    } 
+
+
+
+Buzzer::Buzzer(int pin){
+  this->pin = pin;
+  pinMode(pin, OUTPUT);
 }
 
-/************************
- buzzer_erro
- Aciona o buzzer em modo beep
- entradas
-   k: Quanridade de beeps
- saidas
-   nenhuma
-*************************/
-void buzzer_erro(int k)
-{
-    for(int i=0; i<k; i++){
-      tone(BUZZER_PIN,329); 
-      delay(300);
-      noTone(BUZZER_PIN);
-      delay(300); 
-    } 
+
+void Buzzer::sucesso(){
+  tone(pin,440);
+}
+
+
+void Buzzer::erro(){
+  tone(pin,329);
+}
+
+
+void Buzzer::desligar(){
+  noTone(pin);
 }
