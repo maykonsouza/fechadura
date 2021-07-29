@@ -2,7 +2,7 @@
 //#include "comunicacao.h"
 
 #include "ihm.h"
-#include "senhas.h"
+//#include "senhas.h"
 #include "timer.h"
 #include "buzzer.h"
 #include "display.h"
@@ -24,7 +24,7 @@ Porta entrada(SERVO_PIN);
 // SireneBuzzer sne;
 // InterfaceHomemMaquinaKeypad ihm;
 // SenhasFixa sha;
-// TimerInterno tmr;
+TimerInterno tmr;
 // PassiveInfraredSensor pir;
 
 
@@ -71,12 +71,12 @@ int executarAcao(int codigoAcao)
     case A01:
         informa_inicio(1);        
         tela_imprime(0,"Digite a senha: ");        
-        tmr_iniciar(true);
+        tmr.iniciar(true);
         tela_imprime(1,"     "); 
         break;
     case A02:
         informa_sucesso(2);
-        tmr_iniciar(false);
+        tmr.iniciar(false);
         Serial.println("Abrindo a porta...");
         tela_limpa();
         tela_imprime(0,"   Bem vindo, ");
@@ -89,14 +89,14 @@ int executarAcao(int codigoAcao)
         informa_timeout(1);
         tela_imprime(0,"Seu tempo acabou!");
         Serial.println("Seu tempo acabou!");
-        tmr_iniciar(false);
+        tmr.iniciar(false);
         tela_desliga(800);
         break;
     case A04:
         informa_erro(1);
         tela_imprime(0,"Senha incorreta");
         Serial.println("Senha incorreta");
-        tmr_iniciar(false);
+        tmr.iniciar(false);
         tela_desliga(800);
         break;
     case A05:
@@ -107,23 +107,23 @@ int executarAcao(int codigoAcao)
     case A06:
         Serial.println("Atualiza display");
         tela_imprime(2,"*");
-        tmr_iniciar(true);
+        tmr.iniciar(true);
         break;
     case A07:
         Serial.println("Porta está Aberta");
         informa_inicio(1);
-        tmr_iniciar(false);
+        tmr.iniciar(false);
         break;
     case A08:
         Serial.println("Porta foi Fechada");
         informa_inicio(1);
-        tmr_iniciar(false);
+        tmr.iniciar(false);
         break;
     case A09:
         Serial.println("Abrir porta pelo botão interno");
         informa_inicio(1);
         simula_porta();
-        tmr_iniciar(false);
+        tmr.iniciar(false);
         break;
     } // switch
 
@@ -225,7 +225,7 @@ int decodificarSenha_Valida()
 
 int decodificarTimeout()
 {    
-    if(tmr_timeout()){
+    if(tmr.timeout()){
         sessaoAberta=false;
         return true;
     }

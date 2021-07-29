@@ -22,4 +22,17 @@ extern void tmr_iniciar(int controle);
 ********************************/
 extern int tmr_timeout();
 
+
+class TimerInterno {
+  public:
+  TimerInterno();
+  void iniciar(int controle);
+  int timeout();
+
+  private:
+  int situacao;
+  unsigned long horaInicio;
+};
+
+
 #endif // TIMER_H_INCLUDED

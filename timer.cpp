@@ -5,20 +5,24 @@
 
 #define TEMPO 10
 
-int tmr_situacao = false;
-unsigned long horaInicio;
+
+
+TimerInterno::TimerInterno()
+{
+   situacao = false;
+}
 
 /*******************************
- tmr_iniciar
+ TimerInterno::iniciar
  Aciona ou desaciona o timer
  entradas
    controle: TRUE:liga FALSE:desliga
  saidas
    nenhuma
 ********************************/
-void tmr_iniciar(int controle)
+void TimerInterno::iniciar(int controle)
 {
-   tmr_situacao = controle;
+   situacao = controle;
    if (controle)
    {
       horaInicio = millis();
@@ -26,17 +30,17 @@ void tmr_iniciar(int controle)
 }
 
 /*******************************
- tmr_timeout
+ TimerInterno::timeout
  Retorna se o timer esta em timeout.
  entradas
     nenhuma
  saidas
-    FALSE: não houve estouro do temporizador
+    FALSE: nao houve estouro do temporizador
     TRUE: houve estouro do temporizador
 ********************************/
-int tmr_timeout()
+int TimerInterno::timeout()
 {
-    if (tmr_situacao == false)
+    if (situacao == false)
     {
         return false;
     }
